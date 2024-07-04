@@ -1,4 +1,5 @@
 import tensorflow as tf
+from typing import Literal
 
 
 ############ vision transformer implementation #############
@@ -12,7 +13,11 @@ class MlpBlock(tf.keras.layers.Layer):
         dropout: dropout percentage
     '''
 
-    def __init__(self, dim, hidden_dim, dropout = 0.0):
+    def __init__(self, 
+                 dim : int, 
+                 hidden_dim : int, 
+                 dropout : float | None = 0.0):
+        
         super().__init__()
         self.net = tf.keras.Sequential([
             tf.keras.layers.Dense(hidden_dim, activation=tf.nn.gelu),
@@ -21,8 +26,8 @@ class MlpBlock(tf.keras.layers.Layer):
             tf.keras.layers.Dropout(dropout),
         ])
 
-    def call(self, x):
-        return self.net(x)
+    def call(self, inputs):
+        return self.net(inputs)
 
 
 class TransformerBlock(tf.keras.layers.Layer):
@@ -35,12 +40,17 @@ class TransformerBlock(tf.keras.layers.Layer):
         dropout: dropout percentage
     '''
 
-    def __init__(self, dim, num_heads, mlp_dim, dropout = 0.0):
+    def __init__(self, 
+                 dim : int, 
+                 num_heads : int, 
+                 mlp_dim : int, 
+                 dropout : float | None = 0.0):
+        
         super().__init__()
         self.norm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
         self.attention = tf.keras.layers.MultiHeadAttention(num_heads=num_heads, key_dim=dim)
         self.norm2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
-        self.mlp = MlpBlock(dim, mlp_dim, dropout)
+        self.mlp = MlpBlock(dim, hidden_dim=mlp_dim, dropout=dropout)
 
     def call(self, inputs):
         # first residual connection flow
@@ -70,7 +80,16 @@ class ViT(tf.keras.Model):
         dropout : dropout percentage
     '''
 
-    def __init__(self, image_size, patch_size, num_classes, dim, depth, num_heads, mlp_dim, dropout=0.0):
+    def __init__(self, 
+                 image_size : int, 
+                 patch_size : int, 
+                 num_classes : int, 
+                 dim : int, 
+                 depth : int, 
+                 num_heads : int, 
+                 mlp_dim : int, 
+                 dropout : float | None = 0.0):
+        
         super().__init__()
         # sizes and shapes
         self.patch_size = patch_size
@@ -80,16 +99,17 @@ class ViT(tf.keras.Model):
         num_patches = (image_size // patch_size) ** 2
 
         # embedding
-        self.pos_embedding = self.add_weight("position_embeddings", 
-                                             shape=[1, num_patches + 1, dim], 
+        self.pos_embedding = self.add_weight(name="position_embeddings", 
+                                             shape=(1, num_patches + 1, dim), 
                                              initializer=tf.random_normal_initializer())
-        self.cls_token = self.add_weight("cls_token", 
-                                         shape=[1, 1, dim], 
+        self.cls_token = self.add_weight(name="cls_token", 
+                                         shape=(1, 1, dim), 
                                          initializer=tf.random_normal_initializer())
         
         # initial layers/blocks
         self.patch_proj = tf.keras.layers.Dense(dim)
-        self.transformer_blocks = tf.keras.Sequential([TransformerBlock(dim, num_heads, mlp_dim, dropout) for _ in range(depth)])
+        self.transformer_blocks = tf.keras.Sequential(
+            [TransformerBlock(dim, num_heads, mlp_dim, dropout) for _ in range(depth)])
         self.to_cls_token = tf.identity
         self.mlp_head = tf.keras.Sequential([
             tf.keras.layers.LayerNormalization(epsilon=1e-6),
@@ -98,7 +118,7 @@ class ViT(tf.keras.Model):
             tf.keras.layers.Dense(num_classes),
         ])
 
-    def call(self, images, training=False):
+    def call(self, images, training = False):
         shapes = tf.shape(images)
         batch_size, _, _, _ = tf.unstack(shapes)
 
@@ -128,7 +148,7 @@ class ViT(tf.keras.Model):
 
 ######## vision transformer with augmentation implementation ########
 
-def random_beta(alpha:float,beta:float):
+def random_beta(alpha: float, beta: float):
     '''generate varible from Beta distribution
     
     Args : 
@@ -148,33 +168,36 @@ class MixUp(tf.keras.layers.Layer):
     '''augmentation method mixup
     
     Args :
-        sampling_method : method to generate lambda. '1' indicates beta, '2' indicate uniform
+        sampling_method : method to generate lambda. 'beta' indicates beta, 'uniform' indicate uniform
         alpha : float, parameter for beta distribution
         uniform_range : tuple, predefined range to generate lambda uniformly
     '''
 
-    def __init__(self,sampling_method:str,**kwargs):
+    def __init__(self, sampling_method : Literal['beta','uniform'], **kwargs):
         super().__init__()
         self.index = None
         self.lam = None
         self.sampling_method = sampling_method
 
         # get method type and check necessary args
-        if sampling_method == '1':
+        if sampling_method == 'beta':
             alpha = kwargs.get('alpha',None)
             if alpha is None:
-                raise ValueError('missing argument alpha for sampling_method = 1')
+                raise ValueError('missing argument alpha for sampling_method = beta')
             self.lam_func = lambda : random_beta(alpha,alpha)
-        elif sampling_method == '2':
+
+        elif sampling_method == 'uniform':
             uniform_range = kwargs.get('uniform_range',None)
             if uniform_range is None:
-                raise ValueError('missing argument uniform_range for sampling_method = 2')
-            self.lam_func = lambda : tf.random.uniform(shape=[],minval=uniform_range[0],maxval=uniform_range[1])
+                raise ValueError('missing argument uniform_range for sampling_method = uniform')
+            self.lam_func = lambda : tf.random.uniform(shape=[],
+                                                       minval=uniform_range[0],
+                                                       maxval=uniform_range[1])
 
         else:
-            raise ValueError(f"sampling_method is required to be '1' or '2', while the input is {sampling_method}")
+            raise ValueError(f"sampling_method is required to be 'beta' or 'uniform', while the input is {sampling_method}")
 
-    def call(self,inputs,training):
+    def call(self, inputs, training):
         if training:
             # augmentation during training
             index = tf.range(start=0, limit=inputs.shape[0], dtype=tf.int32)
@@ -192,7 +215,7 @@ class VitAug(tf.keras.Model):
     '''Vit with augmentation MixUp
     
     Args :
-        sampling_method : method to generate lambda. '1' indicates beta, '2' indicate uniform
+        sampling_method : method to generate lambda. 'beta' indicates beta, 'uniform' indicates uniform
         image_size : width or height of input images
         patch_size : width or height of patchs
         num_classes : number of the classes
@@ -205,11 +228,28 @@ class VitAug(tf.keras.Model):
         uniform_range : tuple, predefined range to generate lambda uniformly
     '''
 
-    def __init__(self, sampling_method, image_size, patch_size, num_classes, 
-                 dim, depth, heads, mlp_dim, dropout=0.0, **kwargs):
+    def __init__(self, 
+                 sampling_method : Literal['beta','uniform'], 
+                 image_size : int, 
+                 patch_size : int, 
+                 num_classes : int, 
+                 dim : int, 
+                 depth : int, 
+                 heads : int, 
+                 mlp_dim : int, 
+                 dropout : float | None = 0.0, 
+                 **kwargs):
+        
         super().__init__()
         self.aug = MixUp(sampling_method,**kwargs)
-        self.vit = ViT(image_size,patch_size,num_classes, dim, depth, heads, mlp_dim,dropout)
+        self.vit = ViT(image_size=image_size,
+                       patch_size=patch_size,
+                       num_classes=num_classes, 
+                       dim=dim, 
+                       depth=depth, 
+                       heads=heads, 
+                       mlp_dim=mlp_dim,
+                       dropout=dropout)
 
     def call(self, inputs, training = False):
         outputs = self.aug(inputs, training = training)
