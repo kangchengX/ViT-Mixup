@@ -61,7 +61,7 @@ records = {}
 for method in methods:
     record_dev = model_train_val(dataset=dataset_dev,
                                  filename='saved-model'+'-'+method,
-                                 epoch=20, 
+                                 epoch=40, 
                                  batch=128, 
                                  learning_rate=0.001,
                                  model_param=model_params[method])
