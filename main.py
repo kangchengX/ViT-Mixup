@@ -1,5 +1,5 @@
 # This Python script is a complete pipeline for training and evaluating a Vision Transformer (ViT)
-# model on the CIFAR-10 dataset. Here is a breakdown of what the script does:
+# model on the CIFAR-10 dataset.
 import argparse
 import tensorflow as tf
 import numpy as np
