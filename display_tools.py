@@ -4,24 +4,27 @@ from PIL import Image
 from models import MixUp
 from typing import List, Tuple, Literal
 
-def visualise_mixup(images : np.ndarray, 
-                    size :  Tuple[int], 
-                    sampling_method : Literal['beta','uniform'], 
-                    filename : str | None=None, 
-                    **kwargs):
-    '''visualise the mixup results with a montage
+def visualise_mixup(
+        images: np.ndarray, 
+        size:  Tuple[int], 
+        sampling_method: Literal['beta','uniform'], 
+        filename: str | None=None, 
+        **kwargs
+):
+    """
+    Visualise the mixup results with a montage
     
-    Args :
-        images : image examples
-        size : size of the montage, (rows, cols)
-        sampling_method : method to generate lambda. 'beta' indicates beta, 'uniform' indicate uniform
-        filename : path to save the montage. don't save if None.
-        alpha: float, parameter for beta distribution
-        uniform_range: tuple, predefined range to generate lambda uniformly
+    Args:
+        images (ndarray): image examples
+        size (int): size of the montage, (rows, cols)
+        sampling_method (str): method to generate lambda. 'beta' indicates beta, 'uniform' indicate uniform
+        filename (str | None): path to save the montage. don't save if None.
+        alpha (float): parameter for beta distribution
+        uniform_range (tuple): predefined range to generate lambda uniformly
 
     Returns:
-        images : the montage with the size
-    '''
+        images (ndarray): the montage with the size
+    """
 
     assert images.shape[0] == size[0]*size[1]
 
@@ -40,12 +43,14 @@ def visualise_mixup(images : np.ndarray,
     return images
 
 
-def visualise_results(filename_model : str, 
-                      filename_fig : str, 
-                      images : np.ndarray, 
-                      labels : np.ndarray, 
-                      class_names : List[str]):
-    '''visualise results of the trained model by saving the montage and printing the ture and predicted labels
+def visualise_results(
+        filename_model: str, 
+        filename_fig: str, 
+        images: np.ndarray, 
+        labels: np.ndarray, 
+        class_names: List[str]):
+    """
+    Visualise results of the trained model by saving the montage and printing the ture and predicted labels
     
     Args: 
         filename_model: path of the saved model
@@ -54,7 +59,7 @@ def visualise_results(filename_model : str,
         labels: labels of the images
         class_name: true names of the classes
     
-    '''
+    """
 
     num = images.shape[0]
     montage_width = int(np.sqrt(num))
@@ -79,22 +84,22 @@ def visualise_results(filename_model : str,
     images.save(filename_fig)
 
 
-def report_summary(record : Tuple[np.ndarray], 
-                   dataset_type : Literal['train', 'validation', 'test']):
-    '''report summary of results of the model
+def report_summary(
+        record: Tuple[np.ndarray] | float, 
+        dataset_type: Literal['train', 'validation', 'test']
+):
+    """
+    Report summary of results of the model
 
     Args: 
-        record: (loss_array, accuracy_array, time_array) for train and validation
-            (loss_scaler,accuracy_scaler,time_scaler) for hold out test
-        dataset_type: train, validation or test
-    '''
+        record (tuple): (loss_array, accuracy_array, time_array) for train and validation, 
+            accuracy_scaler for hold out test
+        dataset_type (str): train, validation or test
+    """
 
     if dataset_type == 'test':
        # test
-       print('''\ton hold out test set:
-            loss: {:.3f}
-            accuracy: {:.3f}%
-        '''.format(record[0],record[1]*100))
+       print('''\ton hold out test set: accuracy: {:.3f}%'''.format(record*100))
     
     elif dataset_type in ['train','validation']:
         # development

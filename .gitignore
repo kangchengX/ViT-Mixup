@@ -1,3 +1,4 @@
 __pycache__/
 *.png
-*.ipynb
+*.h5
+*.json
