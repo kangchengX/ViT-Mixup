@@ -6,7 +6,7 @@ from typing import List, Tuple, Literal
 
 def visualise_mixup(
         images: np.ndarray, 
-        size:  Tuple[int], 
+        size: Tuple[int], 
         sampling_method: Literal['beta','uniform'], 
         filename: str | None=None, 
         **kwargs
@@ -48,7 +48,8 @@ def visualise_results(
         filename_fig: str, 
         images: np.ndarray, 
         labels: np.ndarray, 
-        class_names: List[str]):
+        class_names: List[str]
+):
     """
     Visualise results of the trained model by saving the montage and printing the ture and predicted labels
     

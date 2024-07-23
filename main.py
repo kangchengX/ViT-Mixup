@@ -1,3 +1,5 @@
+# This Python script is a complete pipeline for training and evaluating a Vision Transformer (ViT)
+# model on the CIFAR-10 dataset. Here is a breakdown of what the script does:
 import argparse
 import tensorflow as tf
 import numpy as np
@@ -52,8 +54,8 @@ if __name__ == '__main__':
                         help='Number of epochs durning training. Default to 40.')
 
     # execution related
-    parser.add_argument('--monitor_on_validation', action='store_false',
-                        help='Indicates if assess model on the validation set durning training. Default to True')
+    parser.add_argument('--monitor_on_validation', action='store_true',
+                        help='Indicates if assess model on the validation set durning training. Default to False')
 
     # files creating related
     parser.add_argument('--path_root', type=str, default=datetime.now().strftime(r"%Y-%m-%d %H-%M-%S"),
@@ -62,8 +64,8 @@ if __name__ == '__main__':
                         help='Indicates if save the final model. path_root should not be None if this is True. Default to False.')
     parser.add_argument('--save_period', type=int,
                         help='Save the model every save_period of epochs if not None. path_root should not be None if this is not None. Default to None.')
-    parser.add_argument('--save_log', action='store_false',
-                        help='Indicates if log will be saved. path_root should not be None if this is not True. Default to True.')
+    parser.add_argument('--save_log', action='store_true',
+                        help='Indicates if log will be saved. path_root should not be None if this is not True. Default to False.')
 
     args = parser.parse_args()
 
