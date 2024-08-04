@@ -112,27 +112,29 @@ The exapmle data used for this project is a public dataset named [CIFAR-10](http
 
 #### Command Line Arguments
 
-- `--ratio_dev`: Ratio for development set (i.e. training and validation) in the whole data set. Default to 0.8.
-- `--ratio_train`: Ratio for train set in the whole development set. Default to 0.9.
-- `--sampling_method`: Method to generate lambda. Choices are 'beta' or 'uniform'. Default is 'uniform'.
-- `--image_size`: Width or height of input images. Default to 32.
-- `--patch_size`: Width or height of patches. Default to 4.
-- `--num_classes`: Number of the classes. Default to 10.
-- `--dim`: Dimension of the word vectors. Default to 256.
-- `--depth`: Number of transformer blocks. Default to 8.
-- `--num_heads`: Number of heads in the transformer. Default to 8.
-- `--mlp_dim`: Hidden dimension of MLP blocks. Default to 512.
-- `--dropout`: Dropout percentage. Default to 0.5.
-- `--alpha`: Parameter for beta distribution (used if sampling_method is 'beta'). Default to None.
-- `--uniform_range`: Predefined range to generate lambda uniformly (used if sampling_method is 'uniform'). Default to (0.0, 1.0).
-- `--learning_rate`: Learning rate during training. Default to 0.001.
-- `--batch_size`: Batch size during training. Default to 64.
-- `--num_epochs`: Number of epochs during training. Default to 40.
-- `--monitor_on_validation`: Indicates if assess model on the validation set during training. Default to False.
-- `--path_root`: Path root to save models and log if not None. Default to current time.
-- `--save_model`: Indicates if save the final model. `path_root` should not be None if this is True. Default to False.
-- `--save_period`: Save the model every save_period of epochs if not None. `path_root` should not be None if this is not None. Default to None.
-- `--save_log`: Indicates if log will be saved. `path_root` should not be None if this is not True. Default to True.
+| Option | Type | Description | Default Value |
+|--------|------|-------------|---------------|
+| --ratio_dev | Float | Ratio for development set (i.e. training and validation) in the whole data set. | `0.8` |
+| --ratio_train | Float | Ratio for train set in the whole development set. | `0.9` |
+| --sampling_method | String | Method to generate lambda. Choices are `beta` or `uniform`. | `uniform` |
+| --image_size | Integer | Width or height of input images. | `32` |
+| --patch_size | Integer | Width or height of patches. | `4` |
+| --num_classes | Integer | Number of the classes. | `10` |
+| --dim | Integer | Dimension of the word vectors. | `256` |
+| --depth | Integer | Number of transformer blocks. | `8` |
+| --num_heads | Integer | Number of heads in the transformer. | `8` |
+| --mlp_dim | Integer | Hidden dimension of MLP blocks. | `512` |
+| --dropout | Float | Dropout percentage. | `0.5` |
+| --alpha | Float | Parameter for beta distribution (used if sampling_method is `beta`). | `None` |
+| --uniform_range | Tuple | Predefined range to generate lambda uniformly (used if sampling_method is 'uniform'). | `(0.0, 1.0)` |
+| --learning_rate | Float | Learning rate during training. | `0.001` |
+| --batch_size | Integer | Batch size during training. | `64` |
+| --num_epochs | Integer | Number of epochs during training. | `40` |
+| --monitor_on_validation | Boolean | Indicates if assess model on the validation set during training. | `True` |
+| --path_root | String | Path root to save models and log if not `None`. | string of the current time |
+| --save_model | Boolean | Indicates if save the final model. `path_root` should not be `None` if this is `True`. | `False` |
+| --save_period | Integer | Save the model every save_period of epochs if not `None`. `path_root` should not be `None` if this is not `None`. | `None` |
+| --save_log | Boolean | Indicates if log will be saved. `path_root` should not be None if this is not `True`. | `True` |
 
 #### Example
 

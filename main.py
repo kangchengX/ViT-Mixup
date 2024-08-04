@@ -54,7 +54,7 @@ if __name__ == '__main__':
                         help='Number of epochs durning training. Default to 40.')
 
     # execution related
-    parser.add_argument('--monitor_on_validation', action='store_true',
+    parser.add_argument('--monitor_on_validation', action='store_true', default=True,
                         help='Indicates if assess model on the validation set durning training. Default to False')
 
     # files creating related
