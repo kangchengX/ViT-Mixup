@@ -2,9 +2,9 @@ import numpy as np
 from typing import Tuple
 
 def spilt_data(
-        data: Tuple[np.ndarray], 
-        ratio_dev: float | None = 0.8, 
-        ratio_train: float | None = 0.9
+    data: Tuple[np.ndarray], 
+    ratio_dev: float | None = 0.8, 
+    ratio_train: float | None = 0.9
 ) -> Tuple[Tuple[np.ndarray, np.ndarray], Tuple[np.ndarray, np.ndarray], Tuple[np.ndarray, np.ndarray]]:
     """
     Split data to training set, validation set and hold-out test set

@@ -8,10 +8,10 @@ class MlpBlock(tf.keras.layers.Layer):
     """2-layer mlp block implementaion"""
 
     def __init__(
-            self, 
-            dim: int, 
-            hidden_dim: int, 
-            dropout: float | None = 0.5
+        self, 
+        dim: int, 
+        hidden_dim: int, 
+        dropout: float | None = 0.5
     ):
         """
         Initialize the model
@@ -38,11 +38,11 @@ class TransformerBlock(tf.keras.layers.Layer):
     """Transformer block implementation"""
 
     def __init__(
-            self, 
-            dim: int, 
-            num_heads: int, 
-            mlp_dim: int, 
-            dropout: float | None = 0.5
+        self, 
+        dim: int, 
+        num_heads: int, 
+        mlp_dim: int, 
+        dropout: float | None = 0.5
     ):
         """
         Initialize the model
@@ -78,15 +78,15 @@ class ViT(tf.keras.Model):
     """Visiton trandormer implementation"""
 
     def __init__(
-            self, 
-            image_size: int, 
-            patch_size: int, 
-            num_classes: int, 
-            dim: int, 
-            depth: int, 
-            num_heads: int, 
-            mlp_dim: int, 
-            dropout: float | None = 0.5
+        self, 
+        image_size: int, 
+        patch_size: int, 
+        num_classes: int, 
+        dim: int, 
+        depth: int, 
+        num_heads: int, 
+        mlp_dim: int, 
+        dropout: float | None = 0.5
     ):
         """
         Initialize the model
@@ -229,17 +229,17 @@ class VitAug(tf.keras.Model):
     """Vit with augmentation method MixUp"""
 
     def __init__(
-            self, 
-            sampling_method: Literal['beta','uniform'], 
-            image_size: int, 
-            patch_size: int, 
-            num_classes: int, 
-            dim: int, 
-            depth: int, 
-            num_heads: int, 
-            mlp_dim: int, 
-            dropout: float | None = 0.5, 
-            **kwargs
+        self, 
+        sampling_method: Literal['beta','uniform'], 
+        image_size: int, 
+        patch_size: int, 
+        num_classes: int, 
+        dim: int, 
+        depth: int, 
+        num_heads: int, 
+        mlp_dim: int, 
+        dropout: float | None = 0.5, 
+        **kwargs
     ):
         """
         Initialize the model

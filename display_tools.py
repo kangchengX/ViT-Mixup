@@ -5,11 +5,11 @@ from models import MixUp
 from typing import List, Tuple, Literal
 
 def visualise_mixup(
-        images: np.ndarray, 
-        size: Tuple[int], 
-        sampling_method: Literal['beta','uniform'], 
-        filename: str | None=None, 
-        **kwargs
+    images: np.ndarray, 
+    size: Tuple[int], 
+    sampling_method: Literal['beta','uniform'], 
+    filename: str | None=None, 
+    **kwargs
 ):
     """
     Visualise the mixup results with a montage
@@ -44,11 +44,11 @@ def visualise_mixup(
 
 
 def visualise_results(
-        filename_model: str, 
-        filename_fig: str, 
-        images: np.ndarray, 
-        labels: np.ndarray, 
-        class_names: List[str]
+    filename_model: str, 
+    filename_fig: str, 
+    images: np.ndarray, 
+    labels: np.ndarray, 
+    class_names: List[str]
 ):
     """
     Visualise results of the trained model by saving the montage and printing the ture and predicted labels
@@ -86,8 +86,8 @@ def visualise_results(
 
 
 def report_summary(
-        record: Tuple[np.ndarray] | float, 
-        dataset_type: Literal['train', 'validation', 'test']
+    record: Tuple[np.ndarray] | float, 
+    dataset_type: Literal['train', 'validation', 'test']
 ):
     """
     Report summary of results of the model

@@ -49,15 +49,14 @@ class Processor:
     accuracy_test: int | None
 
     def __init__(
-            self,
-            model: VitAug | str,
-            data_train: Tuple[np.ndarray, np.ndarray] | None,
-            data_val: Tuple[np.ndarray, np.ndarray] | None,
-            data_test: Tuple[np.ndarray, np.ndarray] | None,
-            learning_rate: float | None,
-            batch_size: float | None,
-            num_epochs: float | None,
-
+        self,
+        model: VitAug | str,
+        data_train: Tuple[np.ndarray, np.ndarray] | None,
+        data_val: Tuple[np.ndarray, np.ndarray] | None,
+        data_test: Tuple[np.ndarray, np.ndarray] | None,
+        learning_rate: float | None,
+        batch_size: float | None,
+        num_epochs: float | None
     ):
         """
         Initialize the processor.
@@ -89,12 +88,12 @@ class Processor:
         self._add_metrics()
 
     def train(
-            self,
-            monitor_on_validation: bool | None = True,
-            path_root: str | None = None,
-            save_period: int | None = None,
-            save_model: bool | None = False,
-            save_log: bool | None = False,
+        self,
+        monitor_on_validation: bool | None = True,
+        path_root: str | None = None,
+        save_period: int | None = None,
+        save_model: bool | None = False,
+        save_log: bool | None = False
     ):
         """
         Train the model
